@@ -10,16 +10,16 @@
             <div class="header">
                 <div class="request">
                     <form >
-                        <span><input name="configure" class="inputConfigure" type="radio" id="xhr"> HXR</span>
+                        <span><input name="configure" class="inputConfigure" checked type="radio" id="xhr"> HXR</span>
                         <span><input class="inputConfigure" name="configure" type="radio" id="fetch"> fetch</span>
                     </form>
                 </div>
                 <div class="menu">
                     <a href="#">About</a>
                     <span>|</span>
-                    <a href="#Main=123,123">Main</a>
+                    <a href="#main=1">Main</a>
                     <span>|</span>
-                    <a href="#Autor">Autor</a>
+                    <a href="#author">Author</a>
                 </div>
                 <div class="search">
                     <img src="./img/search.png" alt="">
@@ -29,15 +29,25 @@
         </header>
         <main>
             <div class="main">
-                <div class="map"></div>
-                <div class="widgets-map">
-                    <div class="history"></div>
-                    <div class="weather"></div>
-                    <div class="favorites"></div>
+                <div id="about">
+                    <h1>Сайт "Прогноз погоды"</h1>
+                </div>
+                <div id="main">
+                    <div id="map"></div>
+                    <div class="widgets-map">
+                        <div class="history"></div>
+                        <div class="weather"></div>
+                        <div class="favorites"></div>
+                    </div>
+                </div>
+                <div id="author">
+                    <h1>Гинько Михаил!</h1>
                 </div>
             </div>
-        </main>
 
+        </main>
+        <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+        <script src="js/eventBus.js"></script>
         <script src="js/script.js"></script>
         <script src="js/router.js"></script>
     </body>
