@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Map</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <header>
+            <div class="header">
+                <div class="request">
+                    <form >
+                        <span><input name="configure" class="inputConfigure" type="radio" id="xhr"> HXR</span>
+                        <span><input class="inputConfigure" name="configure" type="radio" id="fetch"> fetch</span>
+                    </form>
+                </div>
+                <div class="menu">
+                    <a href="#">About</a>
+                    <span>|</span>
+                    <a href="#Main=123,123">Main</a>
+                    <span>|</span>
+                    <a href="#Autor">Autor</a>
+                </div>
+                <div class="search">
+                    <img src="./img/search.png" alt="">
+                    <input type="text" >
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="main">
+                <div class="map"></div>
+                <div class="widgets-map">
+                    <div class="history"></div>
+                    <div class="weather"></div>
+                    <div class="favorites"></div>
+                </div>
+            </div>
+        </main>
+
+        <script src="js/script.js"></script>
+        <script src="js/router.js"></script>
+    </body>
+</html>
