@@ -62,7 +62,11 @@ var router = new Router({
         name: 'Main',
         match: /main=(.+)/,
         onBeforeEnter:  function(cord) {
-
+            
+            if(!map.createMapFlag){
+            var cord = map.sliceCord(cord);
+            map.createMap(cord);
+        }
         },
         onEnter: function(cord) {
             document.querySelector('#main').style.display = 'block'; 
