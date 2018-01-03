@@ -6,6 +6,8 @@ function Map() {
 
     this.outputSave('history','history-chande-block');
 
+    this.outputSave('favorite','favorite-chande-block');
+
     this.createMap = function(cord) {
         ymaps.ready(init);
         function init () {
@@ -42,6 +44,7 @@ function Map() {
     }
 
     this.moveCity = function(cord) {
+    console.log(cord);
         self.yaMap.panTo(cord, {
             flying: 1
         });
@@ -60,6 +63,24 @@ function Map() {
             self.save('history',objectSave,5);
         });
     }
+
+    this.favorite = function() {
+
+        Promise.resolve()
+            .then(function() {
+            return self.yaMap.getCenter();
+        })
+            .then(function(text) {
+            var num = text;
+            num[0] = num[0].toFixed(7);
+            num[1] = num[1].toFixed(7);
+            var objectSave = {
+                '0':num                
+            }; 
+            self.save('favorite', objectSave,0);
+        });
+
+    }
 }
 
 Map.prototype.sliceCord = function(str) {
@@ -67,15 +88,25 @@ Map.prototype.sliceCord = function(str) {
     return arr;
 }
 
-
+Map.prototype.moveCord = function(event) {
+    var target = event.target;
+    if(target.tagName!='A') {
+        return;
+    }
+var arr =target.getAttribute('href').slice(6).split(',');
+    arr[0]=parseFloat(arr[0]);
+    arr[1]=parseFloat(arr[1]);
+    eb.trigger('changeHach',arr);
+}
 
 Map.prototype.save = function(where,text,size) {
+
     var sObj;
     var storageText =JSON.parse(localStorage.getItem(where));
     var saveObj = {};
     if(!storageText)
     {
-        storageText = text;
+        saveObj = text;
     }else {
         for(var key in storageText) {
             var num = parseInt(key)+1;
@@ -94,9 +125,23 @@ Map.prototype.outputSave = function(where,block) {
     var text = JSON.parse(localStorage.getItem(where));
     var blockOut = document.querySelector('.'+block);
     for(var key in text) {
-        var p = document.createElement('p');
-        p.innerHTML = text[key];
-        blockOut.appendChild(p);
+        if(where === 'favorite') {
+            var p = document.createElement('p'),
+                a = document.createElement('a'),
+                button = document.createElement('button');
+            button.innerHTML = 'del';
+            button.className = key;
+            a.innerHTML = text[key];
+            a.setAttribute('href','#main='+text[key][0]+','+text[key][1]);
+            p.appendChild(a);
+            p.appendChild(button);
+            blockOut.appendChild(p);
+        }
+        if(where === 'history')  {
+            var p = document.createElement('p');
+            p.innerHTML = text[key];
+            blockOut.appendChild(p);
+        }
     }
 }
 
@@ -135,9 +180,51 @@ Map.prototype.enterPress = function() {
 var map = new Map();
 eb.on('cordChange',map.changeButtonHref);
 eb.on('cordChange',map.changeHach);
+
+eb.on('changeHach',map.moveCity);
+eb.on('changeHach',map.changeButtonHref);
+
+
 eb.on('moveCity',map.changeButtonHref);
 eb.on('moveCity',map.changeHach);
 eb.on('moveCity',map.moveCity);
 eb.on('moveCity',map.history);
 document.querySelector('#findButton').addEventListener('click',map.findCity);
-document.querySelector('#findButton').addEventListener('click',map.findCity)
+document.querySelector('.favorite-chande-block').addEventListener('click',map.moveCord);
+document.querySelector('.favorite').addEventListener('click',map.favorite);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
