@@ -44,7 +44,7 @@ function Map() {
     }
 
     this.moveCity = function(cord) {
-    console.log(cord);
+
         self.yaMap.panTo(cord, {
             flying: 1
         });
@@ -78,9 +78,67 @@ function Map() {
                 '0':num                
             }; 
             self.save('favorite', objectSave,0);
+        })
+            .then(function() {
+            self.outputSave('favorite','favorite-chande-block');
         });
 
     }
+
+    this.delItem = function(event) {
+        var target = event.target;
+        if(target.tagName!='BUTTON') {
+            return;
+        }
+        Promise.resolve()
+            .then(function() {
+            self.removeItemFromStorage('favorite',target.className);
+        })
+            .then(function() {
+            self.outputSave('favorite','favorite-chande-block');
+        });
+    }
+}
+
+Map.prototype.XHR = function() {
+    var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
+
+var xhr = new XHR();
+
+
+xhr.open('GET', 'https://api.darksky.net/forecast/41b2362125a88e95e5d8522aa7a1a7d1/53.90249599999646,27.56148099999997', true);
+
+xhr.onload = function() {
+  alert( this.responseText );
+}
+
+xhr.onerror = function() {
+  alert( 'Ошибка ' + this.status );
+}
+
+xhr.send();
+    
+    
+ 
+  
+
+}
+
+Map.prototype.removeItemFromStorage = function(where,link) {
+    return new Promise(function(resolve) {
+        var storageText =JSON.parse(localStorage.getItem(where));
+        delete storageText[link];
+        var arr = [],storageObj = {};
+        for(var i in storageText) {
+            arr.push(storageText[i]);
+        }
+        for(var i= 0;i<arr.length;i++) {
+            storageObj[i] = arr[i];
+        }
+        var sObj = JSON.stringify(storageObj);
+        localStorage.setItem(where,sObj);
+        resolve();
+    });
 }
 
 Map.prototype.sliceCord = function(str) {
@@ -93,7 +151,7 @@ Map.prototype.moveCord = function(event) {
     if(target.tagName!='A') {
         return;
     }
-var arr =target.getAttribute('href').slice(6).split(',');
+    var arr =target.getAttribute('href').slice(6).split(',');
     arr[0]=parseFloat(arr[0]);
     arr[1]=parseFloat(arr[1]);
     eb.trigger('changeHach',arr);
@@ -124,6 +182,7 @@ Map.prototype.save = function(where,text,size) {
 Map.prototype.outputSave = function(where,block) {
     var text = JSON.parse(localStorage.getItem(where));
     var blockOut = document.querySelector('.'+block);
+    blockOut.innerHTML = '';
     for(var key in text) {
         if(where === 'favorite') {
             var p = document.createElement('p'),
@@ -180,11 +239,8 @@ Map.prototype.enterPress = function() {
 var map = new Map();
 eb.on('cordChange',map.changeButtonHref);
 eb.on('cordChange',map.changeHach);
-
 eb.on('changeHach',map.moveCity);
 eb.on('changeHach',map.changeButtonHref);
-
-
 eb.on('moveCity',map.changeButtonHref);
 eb.on('moveCity',map.changeHach);
 eb.on('moveCity',map.moveCity);
@@ -192,7 +248,8 @@ eb.on('moveCity',map.history);
 document.querySelector('#findButton').addEventListener('click',map.findCity);
 document.querySelector('.favorite-chande-block').addEventListener('click',map.moveCord);
 document.querySelector('.favorite').addEventListener('click',map.favorite);
-
+document.querySelector('.favorite-chande-block').addEventListener('click',map.delItem);
+map.XHR();
 
 
 
