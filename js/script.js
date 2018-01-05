@@ -100,28 +100,21 @@ function Map() {
     }
 }
 
-Map.prototype.XHR = function() {
+Map.prototype.XHR = function(cord) {
     var XHR = ("onload" in new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
+    var xhr = new XHR();
+    xhr.open('GET', 'http://cors-proxy.htmldriven.com/?url=https://api.darksky.net/forecast/41b2362125a88e95e5d8522aa7a1a7d1/'+cord, true);
+    xhr.onload = function() {
+        var arr = JSON.parse(this.responseText);
+        var event = JSON.parse(str, function(key, value) {
+            if (key == 'date') return new Date(value);
+            return value;
+        });
+        console.log(arr.body[0]);
 
-var xhr = new XHR();
 
-
-xhr.open('GET', 'https://api.darksky.net/forecast/41b2362125a88e95e5d8522aa7a1a7d1/53.90249599999646,27.56148099999997', true);
-
-xhr.onload = function() {
-  alert( this.responseText );
-}
-
-xhr.onerror = function() {
-  alert( 'Ошибка ' + this.status );
-}
-
-xhr.send();
-    
-    
- 
-  
-
+    }
+    xhr.send();
 }
 
 Map.prototype.removeItemFromStorage = function(where,link) {
@@ -239,17 +232,20 @@ Map.prototype.enterPress = function() {
 var map = new Map();
 eb.on('cordChange',map.changeButtonHref);
 eb.on('cordChange',map.changeHach);
+eb.on('cordChange',map.XHR);
 eb.on('changeHach',map.moveCity);
 eb.on('changeHach',map.changeButtonHref);
+eb.on('changeHach',map.XHR);
 eb.on('moveCity',map.changeButtonHref);
 eb.on('moveCity',map.changeHach);
 eb.on('moveCity',map.moveCity);
 eb.on('moveCity',map.history);
+eb.on('moveCity',map.XHR);
 document.querySelector('#findButton').addEventListener('click',map.findCity);
 document.querySelector('.favorite-chande-block').addEventListener('click',map.moveCord);
 document.querySelector('.favorite').addEventListener('click',map.favorite);
 document.querySelector('.favorite-chande-block').addEventListener('click',map.delItem);
-map.XHR();
+
 
 
 
