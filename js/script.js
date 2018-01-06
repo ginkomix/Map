@@ -7,6 +7,7 @@ function Map() {
 	this.outputSave('history','history-chande-block');
 
 	this.outputSave('favorite','favorite-chande-block');
+	
 	this.XHR = this.XHR.bind(this);
 	this.fetch = this.fetch.bind(this);
 	this.createMap = this.createMap.bind(this);
@@ -138,7 +139,7 @@ Map.prototype.fetch = function(cord) {
 	})
 		.then(function(wearher) {
 		var arr = JSON.parse(wearher.body),
-		 type = arr.currently.precipType,
+			type = arr.currently.precipType,
 			temperature = arr.currently.temperature,
 			speed = arr.currently.windSpeed;
 		self.setWearher(type, temperature,speed);
@@ -264,30 +265,52 @@ Map.prototype.enterPress = function() {
 
 }
 
-
+ function radioChecked() {
+	var radio = document.querySelectorAll('.inputConfigure');
+	for(var i = 0;i < radio.length;i ++) {
+		if(radio[i].checked) {
+			if(radio[i].id === 'xhr') {
+				eb.on('cordChange',map.XHR);
+				eb.off('cordChange',map.fetch);
+				eb.on('changeHach',map.XHR);
+				eb.off('changeHach',map.fetch);
+				eb.on('moveCity',map.XHR);
+				eb.off('moveCity',map.fetch);
+			}
+			if(radio[i].id === 'fetch') {
+				eb.off('cordChange',map.XHR);
+				eb.on('cordChange',map.fetch);
+				eb.off('changeHach',map.XHR);
+				eb.on('changeHach',map.fetch);
+				eb.off('moveCity',map.XHR);
+				eb.on('moveCity',map.fetch);	
+			}
+		}
+	}
+}
 
 var map = new Map();
 eb.on('cordChange',map.changeButtonHref);
 eb.on('cordChange',map.changeHach);
-eb.on('cordChange',map.XHR);
-eb.on('cordChange',map.fetch);
+
 
 eb.on('changeHach',map.moveCity);
 eb.on('changeHach',map.changeButtonHref);
-eb.on('changeHach',map.XHR);
-eb.on('changeHach',map.fetch);
+
 
 eb.on('moveCity',map.changeButtonHref);
 eb.on('moveCity',map.changeHach);
 eb.on('moveCity',map.moveCity);
 eb.on('moveCity',map.history);
-eb.on('moveCity',map.XHR);
-eb.on('moveCity',map.fetch);
+radioChecked();
 document.querySelector('#findButton').addEventListener('click',map.findCity);
 document.querySelector('.favorite-chande-block').addEventListener('click',map.moveCord);
 document.querySelector('.favorite').addEventListener('click',map.favorite);
 document.querySelector('.favorite-chande-block').addEventListener('click',map.delItem);
-
+var radio = document.querySelectorAll('.inputConfigure');
+for(var i = 0;i<radio.length;i++) {
+	radio[i].addEventListener('click',radioChecked);
+}
 
 
 
