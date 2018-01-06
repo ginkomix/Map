@@ -66,7 +66,7 @@ var router = new Router({
             if(!map.createMapFlag){
             var cord = map.sliceCord(cord);
             map.createMap(cord);
-        }
+        } 
         },
         onEnter: function(cord) {
             document.querySelector('#main').style.display = 'block'; 
