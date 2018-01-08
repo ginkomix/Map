@@ -72,10 +72,10 @@ header,main {
     border: 1px solid black;
     
 }
-.history h3, .favorites h3 {
+.history h3, .favorites h3, .weather h3 {
  margin: 5px 0px 0px 5px;   
 }
-.history p {
+.history p, .favorites p, .weather p {
     margin-left: 10px;
 }
 #about, #author {
